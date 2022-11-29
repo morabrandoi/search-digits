@@ -1,5 +1,8 @@
 from collections import deque
 
+
+TEXT = 'BM>EL@SET@1@15'
+DIG_MARGIN = 4
 def read_in_chunks(file_object, chunk_size=1):
     """Lazy function (generator) to read a file piece by piece.
     Default chunk size: 1k."""
@@ -11,18 +14,20 @@ def read_in_chunks(file_object, chunk_size=1):
 
 # ONLY HANDLES WHEN TEXT CONTAINS 10 UNIQUE LETTERS
 def is_text(q, text):
-  l_z = list(zip(text, "".join(list(q))))
+  l_z = list(zip(text, "".join(list(q)[DIG_MARGIN: -1 * DIG_MARGIN])))
   res = all((z1[0] == z2[0]) == (z1[1] == z2[1]) for z1 in l_z for z2 in l_z)
 
   return res
 
-def print_mapping(text, digs):
+def form_and_print_mapping(text, digs):
   mapping = dict(zip(digs, text))
   sorted_items = list(sorted(mapping.items(), key=lambda x: x[0]))
   for item in sorted_items:
     print(f"{item[0]} -> {item[1]}")
+  return mapping
 
-TEXT = 'searchtext:)'
+def translate(mapping, full_dig_str):
+  return "".join(list(map(lambda c: mapping[c], list(full_dig_str))))
 
 # info dump
 print(f"'{TEXT}' has {len(TEXT)} total letters")
@@ -41,20 +46,21 @@ if len(TEXT) > 16:
 counter = 0
 with open('pi-billion.txt') as inFile:
   
-  first_eight = list(inFile.read(len(TEXT)))
-  queue = deque(first_eight)
+  first_set = list(inFile.read(len(TEXT) + (2 * DIG_MARGIN)))
+  queue = deque(first_set)
 
-  if (len(queue) != len(TEXT)):
+  if (len(queue) - (2*DIG_MARGIN) != len(TEXT)):
     print("Queue and Text length are different. Fix")
     exit()
 
   for piece in read_in_chunks(inFile):
     if is_text(queue, TEXT):
-      dig_seq_str = ''.join(list(queue))
-      print(f"At digit: {counter - 1} of pi, we find the sequence {dig_seq_str}.")
+      full_dig_str = ''.join(list(queue))
+      dig_seq_str = full_dig_str[DIG_MARGIN: -1 * DIG_MARGIN]
+      print(f"At digit: {counter} of pi, we find the sequence {full_dig_str}.")
       print("When translated with the following key:")
-      print_mapping(TEXT, dig_seq_str)
-      print(f"it produces the text: '{TEXT}'")
+      mapping = form_and_print_mapping(TEXT, dig_seq_str)
+      print(f"it produces the text: '...{translate(mapping, full_dig_str)}...'")
       exit()
 
     queue.popleft()
