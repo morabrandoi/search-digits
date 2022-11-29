@@ -1,0 +1,2 @@
+# Notes
+The pi-billion.txt file referenced in the code is raw text of the first billion digits of pi. It takes 10000002 Bytes (~1GB) and can be found at https://stuff.mit.edu/afs/sipb/contrib/pi/pi-billion.txt
