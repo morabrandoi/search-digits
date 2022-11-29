@@ -1,7 +1,7 @@
 from collections import deque
 
 
-TEXT = 'BM>EL@SET@1@15'
+TEXT = 'happydayerikalal'
 DIG_MARGIN = 4
 def read_in_chunks(file_object, chunk_size=1):
     """Lazy function (generator) to read a file piece by piece.
@@ -21,6 +21,9 @@ def is_text(q, text):
 
 def form_and_print_mapping(text, digs):
   mapping = dict(zip(digs, text))
+  for i in range(0,10):
+    if str(i) not in mapping:
+      mapping[str(i)] = '_'
   sorted_items = list(sorted(mapping.items(), key=lambda x: x[0]))
   for item in sorted_items:
     print(f"{item[0]} -> {item[1]}")
@@ -35,10 +38,11 @@ print(f"'{TEXT}' has {len(set(list(TEXT)))} unique letters")
 print('\n')
 
 # checking sanity of input
-if (len(set(list(TEXT))) != 10):
-  print(f"need 10 unique letters in text. You have {len(set(list(TEXT)))}")
+num_unique = len(set(list(TEXT)))
+if num_unique > 10:
+  print(f"can have at most 10 unique letters in text. You have {num_unique}")
   exit()
-if len(TEXT) == 16:
+if num_unique == 10 and len(TEXT) == 16:
     print("Roughly 30% \chance of finding the string") 
 if len(TEXT) > 16:
     print("very low chance of finding string")
