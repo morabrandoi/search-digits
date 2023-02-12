@@ -1,7 +1,7 @@
 from collections import deque
 
 
-TEXT = 'happydayerikalal'
+TEXT = 'HappyBday!'
 DIG_MARGIN = 4
 def read_in_chunks(file_object, chunk_size=1):
     """Lazy function (generator) to read a file piece by piece.
